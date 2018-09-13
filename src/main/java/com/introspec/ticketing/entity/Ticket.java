@@ -33,7 +33,7 @@ public class Ticket {
 	private String phoneNumber;
 	private Date transactionDate;
 	private Double amount;	
-	private String channel;
+//	private String channel;
 	@DateTimeFormat(pattern="yyy-MM-dd'T'HH:mm:ss")
 	@Column(nullable=false, updatable=false)
 	@CreatedDate
@@ -42,29 +42,43 @@ public class Ticket {
 	@LastModifiedDate
 	private Date updatedAt;
 	
-//	@ManyToOne
-//	@JoinColumn(name="channelid", referencedColumnName="id")
-//	protected Channel channel;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "channelid", nullable = false)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private Channel channel;
 	
-//	public Ticket() {};
-//	public Ticket(Long id, Long terminalId, String accountNo, String pan, String phoneNumber, Date transactionDate,
-//			Double amount, Date createdAt, Date updatedAt, Long channelid) {
-//		super();
-//		this.id = id;
-//		this.terminalId = terminalId;
-//		this.accountNo = accountNo;
-//		this.pan = pan;
-//		this.phoneNumber = phoneNumber;
-//		this.transactionDate = transactionDate;
-//		this.amount = amount;
+	
+//	 @ManyToOne
+//	 @JoinColumn(name="channel")
+//	 private Channel channel;
+	
+	public Ticket() {};
+	public Ticket(Long id, Long terminalId, String accountNo, String pan, String phoneNumber, Date transactionDate,
+			Double amount, Date createdAt, Date updatedAt) {
+		super();
+		this.id = id;
+		this.terminalId = terminalId;
+		this.accountNo = accountNo;
+		this.pan = pan;
+		this.phoneNumber = phoneNumber;
+		this.transactionDate = transactionDate;
+		this.amount = amount;
 //		this.channel = channel;
-//		this.createdAt = createdAt;
-//		this.updatedAt = updatedAt;
-//		
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
+	public Ticket(Long id) {
+		this.id = id;
+	}
+
+//	public Ticket(Long ticketid, long l, String string, String string2, String string3, Date date, String string4,
+//			Date date2, Date date3) {
+//		// TODO Auto-generated constructor stub
 //	}
-//	public Ticket(Long id) {
-//		this.id = id;
-//	}
+//	
+	
+	
 	
 //	@Override
 //	public String toString() {

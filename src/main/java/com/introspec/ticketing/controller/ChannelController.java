@@ -25,7 +25,7 @@ import com.introspec.ticketing.entity.Ticket;
 import com.introspec.ticketing.service.ChannelService;
 
 @RestController
-@RequestMapping("/channels/")
+@RequestMapping("/tickets/{ticketid}/channels")
 @CrossOrigin(origins = "http://localhost:3000")
 public class ChannelController {
 	
@@ -36,31 +36,57 @@ public class ChannelController {
 	}
 	
 	@GetMapping("")
-    public List<Channel> getAllChannels() {
-		return channelService.getAllChannels();
+    public Page<Channel> getAllChannelsByTicketId(@PathVariable (value = "ticketid") Long ticketid,
+                                                Pageable pageable) {
+		return channelService.getAllChannelsByTicketId(ticketid, pageable);
        
     }
-	
-	
-	@GetMapping("/{id}")
-	public Channel getChannelById(@PathVariable Long id) {
-		return channelService.getChannelById(id).get();
-	}
-	
-	
+
     @PostMapping("")
-    public Channel addChannel(@Valid @RequestBody Channel channel) {
-    	return channelService.addChannel(channel);
+    public Channel createChannel(@PathVariable (value = "ticketId") Long ticketid,
+                                 @Valid @RequestBody Channel channel) {
+    	return channelService.createChannel(ticketid, channel);
          }
-    
+
     @PutMapping("/{id}")
-	public Channel updateTicket(@PathVariable Long id, @RequestBody Channel updatedChannel){
-//		channelService.updateTicketInChannel(updatedTicket.getChannelid(), updatedChannel);
-		return channelService.updateChannel(id, updatedChannel);
-	}
+    public Channel updateChannel(@PathVariable (value = "ticketid") Long ticketid,
+                                 @PathVariable (value = "id") Long id,
+                                 @Valid @RequestBody Channel updatedChannel) {
+    	return channelService.updateChannel(ticketid, id, updatedChannel);
+        }
 
     @DeleteMapping("/{id}")
-    public void deleteChannel(@PathVariable Long id) {
-    	channelService.deleteChannel(id);
+    public ResponseEntity<?> deleteChannel(@PathVariable (value = "ticketid") Long ticketid,
+                              @PathVariable (value = "id") Long id) {
+    	return channelService.deleteChannel(ticketid, id);
     }
+       
 }
+	
+	
+	
+////	@GetMapping("/all")
+////	public List<Channel> getAllChannels(){
+////		return channelService.getAllChannels();
+////	}
+//	
+//	@GetMapping("")
+//	public List<Channel> getAllChannel(@PathVariable Long ticketid){
+//		return channelService.getAllChannel(ticketid);
+//	}
+//	
+//	@GetMapping("/{id}")
+//	public Channel getChannel(@PathVariable Long ticketid, @PathVariable Long id ){	
+//		return channelService.getChannel(id).get();
+//	}
+//	
+//	@PostMapping("")
+//	public Channel addChannel(@RequestBody Channel channel, @PathVariable Long ticketid){
+//		channel.setTicket( new Ticket(ticketid, 1l, "", "", "",  new Date(), 0.00, new Date(), new Date()));
+//		return channelService.addChannel(channel);
+//	}
+
+	
+	
+
+

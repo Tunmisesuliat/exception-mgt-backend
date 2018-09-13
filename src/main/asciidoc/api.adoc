@@ -1,0 +1,36 @@
+
+= RESTful TicketingAppApplication API Specification
+
+0.0.1
+
+:doctype: book
+
+== Introduction
+This is an example of Spring REST Docs generated documentation.
+
+== Tickets API
+Collection of CRUD API endpoints used to manipulate tickets registered in the application.
+
+
+== Add a new ticket
+
+A `POST` request is used to add a new ticket
+
+operation::add-ticket[snippets='http-request,request-fields,http-response']
+
+== Find a ticket by id
+
+A `GET` request is used to find a new ticket by id
+Obtains a specific person registered in the application by its unique identifier.
+
+operation::find-ticket-by-id[snippets='http-request,path-parameters,http-response,response-fields']
+
+==== Sample Request
+include::{snippets}/tickets/get-by-id/http-request.adoc[]
+
+==== Sample Response
+include::{snippets}/tickets/get-by-id/http-response.adoc[]
+
+==== CURL sample
+include::{snippets}/tickets/get-by-id/curl-request.adoc[]
+

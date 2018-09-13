@@ -22,48 +22,50 @@ import lombok.Data;
 @Data
 @EntityListeners(AuditingEntityListener.class)
 public class Channel {
-	@NotNull
 	@Id
-//	@Column(name="id",nullable=false)
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+//	private Integer Time;
+	@NotNull
+    @Lob
+	private String type;
+	@NotNull
+    @Lob
 	private String name;
+//	private Set<Ticket> ticket = new HashSet<Ticket>();
 	
-	
-	@JsonIgnore
 	 @OneToMany(cascade = CascadeType.ALL,
 	            fetch = FetchType.LAZY,
-	            mappedBy = "channel")
-	    private List<Ticket> tickets;
-	//= new ArrayList<>();
+	            mappedBy = "post")
+	    private Set<Ticket> comments = new HashSet<>();
 	
-	@JsonIgnore
-	 @OneToMany(cascade = CascadeType.ALL,
-	            fetch = FetchType.EAGER
-	            )
-       private List<Type> types;
-	//= new ArrayList<>();
-	
-//	@ManyToOne
-//	@JoinColumn(name="typeid", referencedColumnName="id")
-//	private Type type;
+//	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+//    @JoinColumn(name = "ticketid", nullable = false)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+//    @JsonIgnore
+//    private Ticket ticket;
+//	
 
 	public Channel() {}
 	
-	public Channel(Long id,String name, List<Type> types, List<Ticket> tickets) {
+	public Channel(Long id, String type, String name, Long ticketid) {
 		super();
 		this.id = id;
+		this.type = type;
 		this.name = name;
-		this.types = types;
-		this.tickets= tickets;
-
+//		this.ticket= new Ticket(ticketid);
 //		this.ticket=  new Ticket(ticketid, 1l, "", "", "",  new Date(), 0.00, new Date(), new Date());
-	}
-////	public void addTicket(Ticket ticket) {
-////		this.tickets.add(ticket);
-////	}
-//	
+	} 	
 }
+//@OneToMany(mappedBy="channel",  targetEntity=Ticket.class)
+////cascade=CascadeType.ALL
+//private Ticket ticket;
+//
+
+////public Ticket ticket = new Ticket();
+//public Set<Ticket> getTicket() { return ticket; }
+//void setTicket(Set ticket) { this.ticket = ticket; }
+//private Set<Ticket> ticket =  new TreeSet<>();
 
 
 

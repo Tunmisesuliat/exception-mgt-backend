@@ -20,51 +20,60 @@ import com.introspec.ticketing.repo.TicketRepo;
 public class ChannelService {
 	
 	private final ChannelRepo channelRepo;
+	private TicketRepo ticketRepo;
 	
 	@Autowired
-	public ChannelService(final ChannelRepo channelRepo) { 
+	public ChannelService(final ChannelRepo channelRepo,final TicketRepo ticketRepo) { 
 		this.channelRepo = channelRepo;
+		this.ticketRepo = ticketRepo;
 	}
 
 
 	
 	//to get all tickets generated from  a particular channel
-	 public List<Channel> getAllChannels() {
-		 return channelRepo.findAll();
+	 public Page<Channel> getAllChannelsByTicketId(Long ticketid, Pageable pageable) {
+		 return channelRepo.findByTicketId(ticketid, pageable);
 			}
 	 
-	 public Optional<Channel> getChannelById(Long id){
+	 
+	 public Optional<Channel> getChannel(Long id){
 			return channelRepo.findById(id);
 		}
 	 
-	 public Optional<Channel> getChannelByName(String name){
-			return channelRepo.findByName(name);
-		}
 	 
-	 public Channel addChannel(Channel channel) {	
-			return channelRepo.save(channel);	
-		}
-	 
-	 
-	 public Channel updateChannel(Long id, Channel updatedChannel){
-			return channelRepo.findById(id).map(
-				channel -> {
-					channel.setName(updatedChannel.getName());
-					return channelRepo.save(channel);
-				}
-			).orElseThrow(()-> new ResourceNotFound(String.format("Channel id {0} not found", id)));
+	 public Channel createChannel(Long ticketid, Channel channel) {
+		 return ticketRepo.findById(ticketid).map(ticket -> {
+	            channel.setTicket(ticket);
+	            return channelRepo.save(channel);
+	        }).orElseThrow(() -> new ResourceNotFound("TicketId " + ticketid + " not found"));	
 		}
 	 
 	 
-	 public Channel deleteChannel(Long id){
-			return channelRepo.findById(id).map(
-				channel -> {
-					channelRepo.delete(channel);
-					return channel;
-				}
-			).orElseThrow(()-> new ResourceNotFound(String.format("Channel id {0} not found", id)));
-		}
+	 public Channel updateChannel(Long ticketid, Long id, Channel updatedChannel){
+		 
+		  if(!ticketRepo.existsById(ticketid)) {
+	            throw new ResourceNotFound("TicketId " +ticketid + " not found");
+	        }
 
+	        return channelRepo.findById(id).map(channel -> {
+	            channel.setName(updatedChannel.getName());
+	            channel.setType(updatedChannel.getType());
+	            return channelRepo.save(channel);
+	        }).orElseThrow(() -> new ResourceNotFound("ChannelId " + id + "not found"));
+	  
+	 }
+
+	 
+	 public ResponseEntity<?> deleteChannel(Long ticketid, Long id){
+		 if(!ticketRepo.existsById(ticketid)) {
+	            throw new ResourceNotFound("TicketId " + ticketid + " not found");
+	        }
+
+	        return channelRepo.findById(id).map(channel -> {
+	             channelRepo.delete(channel);
+	             return ResponseEntity.ok().build();
+	        }).orElseThrow(() -> new ResourceNotFound("ChannelId " + id + " not found"));
+	    }
 		 
 } 
 

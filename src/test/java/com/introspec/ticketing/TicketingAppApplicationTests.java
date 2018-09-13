@@ -10,10 +10,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.introspec.ticketing.entity.Channel;
 import com.introspec.ticketing.entity.Ticket;
-import com.introspec.ticketing.entity.Type;
 import com.introspec.ticketing.repo.ChannelRepo;
 import com.introspec.ticketing.repo.TicketRepo;
-import com.introspec.ticketing.repo.TypeRepo;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -22,9 +20,6 @@ public class TicketingAppApplicationTests {
 	private TicketRepo ticketRepo;
 	@Autowired
 	private ChannelRepo channelRepo;
-	
-	@Autowired
-	private TypeRepo typeRepo;
 	
 //	private final TicketRepo ticketRepo;
 //	
@@ -42,7 +37,7 @@ public class TicketingAppApplicationTests {
 		ticket.setPhoneNumber("08135997541");
 		ticket.setAmount(120.90);
 		ticket.setTransactionDate(new Date());
-		ticket.setChannel("ATM");
+//		ticket.setChannel("NTA");
 		ticket.setTerminalId(12346l);
 //		ticket.setCreatedAt(new Date());
 //		ticket.setUpdatedAt(new Date());
@@ -52,19 +47,10 @@ public class TicketingAppApplicationTests {
 	@Test
 	public void CreateChannel() {
 		Channel channel = new Channel();
-		channel.setName("ATM");
-	
-		channelRepo.save(channel);
+		channel.setName("CORE");
+		channel.setType("Dispense error");
 		
-	}
-	
-	@Test
-	public void CreateType() {
-		Type type = new Type(null, null, null);
-		type.setName("Dispense Error");
-		type.setTime(12);
-	
-		typeRepo.save(type);
+		channelRepo.save(channel);
 		
 	}
 
